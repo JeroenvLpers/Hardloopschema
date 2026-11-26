@@ -1,0 +1,261 @@
+{
+  "wedstrijd": {
+    "naam": "NN CPC Loop Den Haag",
+    "datum": "2027-03-14",
+    "afstand": "21,1 km"
+  },
+  "start": "2026-11-30",
+  "standaardDagen": [2, 4, 7],
+
+  "weken": [
+    {
+      "label": "",
+      "trainingen": [
+        { "soort": "rustig", "titel": "Rustig", "km": 6.5,
+          "stappen": [{ "titel": "6,5 km", "detail": "rustig tempo" }] },
+        { "soort": "interval", "titel": "Interval", "km": 6,
+          "stappen": [
+            { "titel": "Opwarmen", "detail": "2 km rustig" },
+            { "titel": "6 × 400 m", "detail": "5:10 /km", "rust": "60 s rust tussen elke herhaling" },
+            { "titel": "Afkoelen", "detail": "1,6 km rustig" }
+          ] },
+        { "soort": "lang", "titel": "Lang", "km": 8,
+          "stappen": [
+            { "titel": "3 km", "detail": "6:35 /km" },
+            { "titel": "2 km", "detail": "6:20 /km" },
+            { "titel": "2 km", "detail": "6:05 /km" },
+            { "titel": "1 km", "detail": "rustig" }
+          ] }
+      ]
+    },
+    {
+      "label": "",
+      "trainingen": [
+        { "soort": "rustig", "titel": "Rustig", "km": 6.5,
+          "stappen": [{ "titel": "6,5 km", "detail": "rustig tempo" }] },
+        { "soort": "interval", "titel": "Interval", "km": 7.6,
+          "stappen": [
+            { "titel": "Opwarmen", "detail": "2 km rustig" },
+            { "titel": "5 × 800 m", "detail": "5:20 /km", "rust": "90 s rust tussen elke herhaling" },
+            { "titel": "Afkoelen", "detail": "1,6 km rustig" }
+          ] },
+        { "soort": "lang", "titel": "Lang", "km": 10,
+          "stappen": [{ "titel": "10 km", "detail": "rustig tempo" }] }
+      ]
+    },
+    {
+      "label": "herstel",
+      "trainingen": [
+        { "soort": "rustig", "titel": "Rustig", "km": 6,
+          "stappen": [{ "titel": "6 km", "detail": "rustig tempo" }] },
+        { "soort": "tempo", "titel": "Tempo", "km": 7.5,
+          "stappen": [
+            { "titel": "Opwarmen", "detail": "2 km rustig" },
+            { "titel": "2 × 2 km", "detail": "5:55 /km", "rust": "2 min rust ertussen" },
+            { "titel": "Afkoelen", "detail": "1,5 km rustig" }
+          ] },
+        { "soort": "lang", "titel": "Lang", "km": 8,
+          "stappen": [{ "titel": "8 km", "detail": "rustig tempo" }] }
+      ]
+    },
+    {
+      "label": "",
+      "trainingen": [
+        { "soort": "rustig", "titel": "Rustig", "km": 7,
+          "stappen": [{ "titel": "7 km", "detail": "rustig tempo" }] },
+        { "soort": "interval", "titel": "Interval", "km": 7.2,
+          "stappen": [
+            { "titel": "Opwarmen", "detail": "2 km rustig" },
+            { "titel": "6 × 600 m", "detail": "5:15 /km", "rust": "90 s rust tussen elke herhaling" },
+            { "titel": "Afkoelen", "detail": "1,6 km rustig" }
+          ] },
+        { "soort": "lang", "titel": "Lang", "km": 11,
+          "stappen": [
+            { "titel": "8 km", "detail": "6:35 /km" },
+            { "titel": "3 km", "detail": "6:10 /km" }
+          ] }
+      ]
+    },
+    {
+      "label": "",
+      "trainingen": [
+        { "soort": "rustig", "titel": "Rustig", "km": 7,
+          "stappen": [{ "titel": "7 km", "detail": "rustig tempo" }] },
+        { "soort": "tempo", "titel": "Tempo", "km": 8.5,
+          "stappen": [
+            { "titel": "Opwarmen", "detail": "2 km rustig" },
+            { "titel": "3 km", "detail": "5:55 /km", "rust": "daarna 2 min rust" },
+            { "titel": "2 km", "detail": "5:50 /km" },
+            { "titel": "Afkoelen", "detail": "1,5 km rustig" }
+          ] },
+        { "soort": "lang", "titel": "Lang", "km": 12,
+          "stappen": [{ "titel": "12 km", "detail": "rustig tempo" }] }
+      ]
+    },
+    {
+      "label": "",
+      "trainingen": [
+        { "soort": "rustig", "titel": "Rustig", "km": 7,
+          "stappen": [{ "titel": "7 km", "detail": "rustig tempo" }] },
+        { "soort": "interval", "titel": "Interval", "km": 8.6,
+          "stappen": [
+            { "titel": "Opwarmen", "detail": "2 km rustig" },
+            { "titel": "5 × 1 km", "detail": "5:25 /km", "rust": "90 s rust tussen elke herhaling" },
+            { "titel": "Afkoelen", "detail": "1,6 km rustig" }
+          ] },
+        { "soort": "lang", "titel": "Lang", "km": 13,
+          "stappen": [
+            { "titel": "9 km", "detail": "rustig" },
+            { "titel": "4 km", "detail": "6:15 /km" }
+          ] }
+      ]
+    },
+    {
+      "label": "herstel",
+      "trainingen": [
+        { "soort": "rustig", "titel": "Rustig", "km": 6,
+          "stappen": [{ "titel": "6 km", "detail": "rustig tempo" }] },
+        { "soort": "tempo", "titel": "5k-test", "km": 8.5,
+          "stappen": [
+            { "titel": "Opwarmen", "detail": "2 km rustig" },
+            { "titel": "5 km", "detail": "volle inzet" },
+            { "titel": "Afkoelen", "detail": "1,5 km rustig" }
+          ] },
+        { "soort": "lang", "titel": "Lang", "km": 10,
+          "stappen": [{ "titel": "10 km", "detail": "rustig tempo" }] }
+      ]
+    },
+    {
+      "label": "",
+      "trainingen": [
+        { "soort": "rustig", "titel": "Rustig", "km": 8,
+          "stappen": [{ "titel": "8 km", "detail": "rustig tempo" }] },
+        { "soort": "interval", "titel": "Interval", "km": 8.4,
+          "stappen": [
+            { "titel": "Opwarmen", "detail": "2 km rustig" },
+            { "titel": "4 × 1,2 km", "detail": "5:30 /km", "rust": "2 min rust tussen elke herhaling" },
+            { "titel": "Afkoelen", "detail": "1,6 km rustig" }
+          ] },
+        { "soort": "lang", "titel": "Lang", "km": 14,
+          "stappen": [
+            { "titel": "10 km", "detail": "6:35 /km" },
+            { "titel": "4 km", "detail": "6:15 /km" }
+          ] }
+      ]
+    },
+    {
+      "label": "",
+      "trainingen": [
+        { "soort": "rustig", "titel": "Rustig", "km": 8,
+          "stappen": [{ "titel": "8 km", "detail": "rustig tempo" }] },
+        { "soort": "tempo", "titel": "Tempo", "km": 8.5,
+          "stappen": [
+            { "titel": "Opwarmen", "detail": "2 km rustig" },
+            { "titel": "5 km", "detail": "5:55 /km" },
+            { "titel": "Afkoelen", "detail": "1,5 km rustig" }
+          ] },
+        { "soort": "lang", "titel": "Lang", "km": 15,
+          "stappen": [{ "titel": "15 km", "detail": "rustig tempo" }] }
+      ]
+    },
+    {
+      "label": "",
+      "trainingen": [
+        { "soort": "rustig", "titel": "Rustig", "km": 8,
+          "stappen": [{ "titel": "8 km", "detail": "rustig tempo" }] },
+        { "soort": "interval", "titel": "Interval", "km": 8.4,
+          "stappen": [
+            { "titel": "Opwarmen", "detail": "2 km rustig" },
+            { "titel": "6 × 800 m", "detail": "5:20 /km", "rust": "90 s rust tussen elke herhaling" },
+            { "titel": "Afkoelen", "detail": "1,6 km rustig" }
+          ] },
+        { "soort": "lang", "titel": "Lang", "km": 16,
+          "stappen": [
+            { "titel": "12 km", "detail": "rustig" },
+            { "titel": "4 km", "detail": "6:10 /km" }
+          ] }
+      ]
+    },
+    {
+      "label": "herstel",
+      "trainingen": [
+        { "soort": "rustig", "titel": "Rustig", "km": 7,
+          "stappen": [{ "titel": "7 km", "detail": "rustig tempo" }] },
+        { "soort": "tempo", "titel": "Tempo", "km": 8.5,
+          "stappen": [
+            { "titel": "Opwarmen", "detail": "2 km rustig" },
+            { "titel": "2 × 2,5 km", "detail": "5:55 /km", "rust": "2 min rust ertussen" },
+            { "titel": "Afkoelen", "detail": "1,5 km rustig" }
+          ] },
+        { "soort": "lang", "titel": "Lang", "km": 12,
+          "stappen": [{ "titel": "12 km", "detail": "rustig tempo" }] }
+      ]
+    },
+    {
+      "label": "",
+      "trainingen": [
+        { "soort": "rustig", "titel": "Rustig", "km": 8,
+          "stappen": [{ "titel": "8 km", "detail": "rustig tempo" }] },
+        { "soort": "interval", "titel": "Interval", "km": 8.6,
+          "stappen": [
+            { "titel": "Opwarmen", "detail": "2 km rustig" },
+            { "titel": "5 × 1 km", "detail": "5:25 /km", "rust": "90 s rust tussen elke herhaling" },
+            { "titel": "Afkoelen", "detail": "1,6 km rustig" }
+          ] },
+        { "soort": "lang", "titel": "Lang", "km": 17,
+          "stappen": [
+            { "titel": "13 km", "detail": "rustig" },
+            { "titel": "4 km", "detail": "6:10 /km" }
+          ] }
+      ]
+    },
+    {
+      "label": "piek",
+      "trainingen": [
+        { "soort": "rustig", "titel": "Rustig", "km": 8,
+          "stappen": [{ "titel": "8 km", "detail": "rustig tempo" }] },
+        { "soort": "tempo", "titel": "Tempo", "km": 9.5,
+          "stappen": [
+            { "titel": "Opwarmen", "detail": "2 km rustig" },
+            { "titel": "6 km", "detail": "5:55 /km" },
+            { "titel": "Afkoelen", "detail": "1,5 km rustig" }
+          ] },
+        { "soort": "lang", "titel": "Lang", "km": 19,
+          "stappen": [
+            { "titel": "16 km", "detail": "rustig" },
+            { "titel": "3 km", "detail": "6:15 /km" }
+          ] }
+      ]
+    },
+    {
+      "label": "afbouwen",
+      "trainingen": [
+        { "soort": "rustig", "titel": "Rustig", "km": 6,
+          "stappen": [{ "titel": "6 km", "detail": "rustig tempo" }] },
+        { "soort": "tempo", "titel": "Tempo", "km": 8,
+          "stappen": [
+            { "titel": "Opwarmen", "detail": "2 km rustig" },
+            { "titel": "3 × 1,5 km", "detail": "5:50 /km", "rust": "90 s rust tussen elke herhaling" },
+            { "titel": "Afkoelen", "detail": "1,5 km rustig" }
+          ] },
+        { "soort": "lang", "titel": "Lang", "km": 12,
+          "stappen": [{ "titel": "12 km", "detail": "rustig tempo" }] }
+      ]
+    },
+    {
+      "label": "wedstrijd",
+      "trainingen": [
+        { "soort": "rustig", "titel": "Rustig", "km": 5,
+          "stappen": [{ "titel": "5 km", "detail": "rustig tempo" }] },
+        { "soort": "interval", "titel": "Activatie", "km": 4.6,
+          "stappen": [
+            { "titel": "Opwarmen", "detail": "2 km rustig" },
+            { "titel": "4 × 400 m", "detail": "5:20 /km", "rust": "60 s rust tussen elke herhaling" },
+            { "titel": "Afkoelen", "detail": "1 km rustig" }
+          ] },
+        { "soort": "wedstrijd", "titel": "Wedstrijd", "km": 21.1, "vasteDag": 7,
+          "stappen": [{ "titel": "21,1 km", "detail": "volgens raceplan" }] }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,300 @@
+/* ===== Kleuren (jouw palet) ===== */
+:root {
+  --bg: #06141B;
+  --surface: #11212D;
+  --surface-2: #253745;
+  --muted: #4A5C6A;
+  --text-2: #9BA8AB;
+  --text: #CCD0CF;
+
+  /* Gedempte accentkleuren per soort training */
+  --rustig: #6E93AE;
+  --interval: #A88AA4;
+  --tempo: #BBA67E;
+  --lang: #8C8FC0;
+  --wedstrijd: #CCD0CF;
+
+  --done: #6FA58A;
+  --radius: 16px;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0 auto;
+  max-width: 560px;
+  min-height: 100vh;
+  padding: max(16px, env(safe-area-inset-top)) 16px calc(32px + env(safe-area-inset-bottom));
+  background: var(--bg);
+  color: var(--text);
+  font: 17px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+h1, h2, h3, p { margin: 0; }
+button, input, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+.sub { color: var(--text-2); font-size: 15px; }
+
+/* ===== Bovenkant: wedstrijd + aftelbalk ===== */
+.race {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+.race h1 { font-size: 21px; font-weight: 700; letter-spacing: .01em; }
+
+.icon-btn {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--text);
+  font-size: 30px;
+  line-height: 1;
+}
+.icon-btn:active { background: var(--surface); }
+.icon-btn:disabled { opacity: .25; }
+
+.countdown { margin: 18px 0 26px; }
+.days-left { font-size: 15px; color: var(--text-2); margin-bottom: 12px; }
+.days-left strong { color: var(--text); font-size: 24px; font-weight: 700; margin-right: 2px; }
+
+.track {
+  position: relative;
+  height: 10px;
+  margin-right: 14px;
+  border-radius: 99px;
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--surface-2);
+}
+.fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--muted), var(--text-2));
+}
+.runner {
+  position: absolute;
+  top: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border-radius: 50%;
+  background: var(--text);
+  box-shadow: 0 0 0 4px var(--bg), 0 0 0 5px var(--muted);
+}
+.finish {
+  position: absolute;
+  right: -14px;
+  top: -8px;
+  width: 14px;
+  height: 26px;
+  border-radius: 2px;
+  background: repeating-conic-gradient(var(--text) 0 25%, var(--surface-2) 0 50%) 0 0 / 7px 6.5px;
+}
+.track-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  font-size: 13px;
+}
+
+/* ===== Weeknavigatie ===== */
+.weeknav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.weeknav-mid { text-align: center; }
+.weeknav h2 { font-size: 20px; font-weight: 700; }
+
+.weekline {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  min-height: 44px;
+  margin-bottom: 8px;
+  color: var(--text-2);
+  font-size: 15px;
+}
+.link-btn {
+  border: 0;
+  padding: 8px 12px;
+  border-radius: 99px;
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 14px;
+}
+
+/* ===== Trainingskaarten ===== */
+#cards { display: grid; gap: 12px; }
+
+.card {
+  --soort: var(--rustig);
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--surface);
+  transition: opacity .2s;
+}
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 6px;
+  background: var(--soort);
+}
+.soort-interval { --soort: var(--interval); }
+.soort-tempo { --soort: var(--tempo); }
+.soort-lang { --soort: var(--lang); }
+.soort-wedstrijd { --soort: var(--wedstrijd); }
+
+.card.today { box-shadow: inset 0 0 0 2px var(--text-2); }
+
+.card-head { display: flex; align-items: center; }
+
+.card-toggle {
+  flex: 1;
+  min-width: 0;
+  padding: 14px 8px 14px 22px;
+  border: 0;
+  background: none;
+  text-align: left;
+}
+.date { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--text-2); }
+.badge {
+  padding: 2px 8px;
+  border-radius: 99px;
+  background: var(--text);
+  color: var(--bg);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.moved { font-size: 12px; color: var(--muted); }
+.title { display: block; margin-top: 2px; font-size: 19px; font-weight: 650; }
+.km { display: block; color: var(--text-2); font-size: 15px; }
+
+/* Afvinkknop: groot, goed met de duim te raken */
+.check {
+  flex: none;
+  width: 56px;
+  height: 56px;
+  margin: 0 12px;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--muted);
+  border-radius: 50%;
+  background: transparent;
+  color: transparent;
+}
+.check svg { width: 28px; height: 28px; }
+
+/* Afgerond: groen vinkje, datum doorgestreept, kaart vager */
+.card.done .check { background: var(--done); border-color: var(--done); color: var(--bg); }
+.card.done .date-text { text-decoration: line-through; }
+.card.done .card-toggle,
+.card.done .card-body { opacity: .5; }
+
+/* Uitgeklapte details */
+.card-body { padding: 0 16px 18px 22px; }
+.card-body[hidden] { display: none; }
+
+.steps {
+  list-style: none;
+  margin: 0 0 16px;
+  padding: 14px 0 0;
+  border-top: 1px solid var(--surface-2);
+  counter-reset: stap;
+}
+.steps li {
+  counter-increment: stap;
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  column-gap: 8px;
+  padding: 7px 0;
+}
+.steps li::before {
+  content: counter(stap);
+  grid-row: span 2;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--surface-2);
+  color: var(--text-2);
+  font-size: 13px;
+  font-weight: 700;
+}
+.step-main { display: flex; justify-content: space-between; gap: 12px; }
+.step-title { font-weight: 600; }
+.step-detail { color: var(--text-2); text-align: right; }
+.step-rust { grid-column: 2; font-size: 14px; color: var(--text-2); font-style: italic; }
+
+.fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.fields label, .move { display: grid; gap: 4px; font-size: 13px; color: var(--text-2); }
+
+input, select {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 12px;
+  border: 1px solid var(--surface-2);
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--text);
+}
+input::placeholder { color: var(--muted); }
+input:focus, select:focus { outline: 2px solid var(--text-2); outline-offset: 0; }
+
+/* ===== Menu ===== */
+dialog {
+  width: min(100% - 32px, 480px);
+  padding: 8px 20px 24px;
+  border: 1px solid var(--surface-2);
+  border-radius: 20px;
+  background: var(--surface);
+  color: var(--text);
+}
+dialog::backdrop { background: rgb(6 20 27 / .75); }
+.menu-head { display: flex; justify-content: space-between; align-items: center; margin-right: -12px; }
+.menu-head h2 { font-size: 20px; }
+.menu-head .icon-btn { font-size: 22px; }
+dialog h3 { font-size: 16px; margin: 8px 0 2px; }
+
+.daypick { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin: 14px 0; }
+.daypick button {
+  min-height: 48px;
+  border: 1px solid var(--surface-2);
+  border-radius: 12px;
+  background: var(--bg);
+  font-size: 15px;
+}
+.daypick button[aria-pressed="true"] { background: var(--text); color: var(--bg); border-color: var(--text); font-weight: 700; }
+
+.btn {
+  width: 100%;
+  min-height: 50px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--surface-2);
+  font-weight: 600;
+}
+.btn:disabled { opacity: .4; }
+.btn.danger { background: transparent; border: 1px solid #7a4a4a; color: #d9a3a3; }
+
+hr { border: 0; border-top: 1px solid var(--surface-2); margin: 22px 0; }
+
+.error { padding: 20px; border-radius: var(--radius); background: var(--surface); color: var(--text-2); }

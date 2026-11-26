@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#06141B">
+  <title>Hardloopschema</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon-192.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="race">
+      <div>
+        <h1 id="raceName">Hardloopschema</h1>
+        <p id="raceMeta" class="sub"></p>
+      </div>
+      <button id="menuBtn" class="icon-btn" aria-label="Menu">
+        <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <div class="countdown">
+      <p id="daysLeft" class="days-left"></p>
+      <div class="track" aria-hidden="true">
+        <div class="fill" id="trackFill"></div>
+        <div class="runner" id="trackRunner"></div>
+        <div class="finish"></div>
+      </div>
+      <div class="track-labels sub"><span id="startLabel"></span><span id="endLabel"></span></div>
+    </div>
+  </header>
+
+  <nav class="weeknav">
+    <button id="prevWeek" class="icon-btn" aria-label="Vorige week">‹</button>
+    <div class="weeknav-mid">
+      <h2 id="weekTitle"></h2>
+      <p id="weekMeta" class="sub"></p>
+    </div>
+    <button id="nextWeek" class="icon-btn" aria-label="Volgende week">›</button>
+  </nav>
+  <div class="weekline">
+    <span id="weekDone"></span>
+    <button id="thisWeek" class="link-btn" hidden>Naar deze week</button>
+  </div>
+
+  <main id="cards"></main>
+
+  <dialog id="menu">
+    <div class="menu-head">
+      <h2>Instellingen</h2>
+      <button id="closeMenu" class="icon-btn" aria-label="Sluiten">✕</button>
+    </div>
+
+    <h3>Trainingsdagen</h3>
+    <p class="sub">Kies 3 dagen. De wedstrijd blijft altijd op zondag.</p>
+    <div id="dayPick" class="daypick"></div>
+    <button id="saveDays" class="btn">Opslaan</button>
+
+    <hr>
+
+    <button id="resetBtn" class="btn danger">Alle vinkjes wissen</button>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
