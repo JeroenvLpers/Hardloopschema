@@ -25,7 +25,7 @@
       <p id="daysLeft" class="days-left"></p>
       <div class="track" aria-hidden="true">
         <div class="fill" id="trackFill"></div>
-        <div class="runner" id="trackRunner"></div>
+        <div class="runner" id="trackRunner">🏃</div>
         <div class="finish"></div>
       </div>
       <div class="track-labels sub"><span id="startLabel"></span><span id="endLabel"></span></div>
@@ -34,10 +34,10 @@
 
   <nav class="weeknav">
     <button id="prevWeek" class="icon-btn" aria-label="Vorige week">‹</button>
-    <div class="weeknav-mid">
-      <h2 id="weekTitle"></h2>
-      <p id="weekMeta" class="sub"></p>
-    </div>
+    <button id="weekBtn" class="weeknav-mid" aria-label="Alle weken bekijken">
+      <span id="weekTitle" class="week-title"></span>
+      <span id="weekMeta" class="sub"></span>
+    </button>
     <button id="nextWeek" class="icon-btn" aria-label="Volgende week">›</button>
   </nav>
   <div class="weekline">
@@ -61,6 +61,14 @@
     <hr>
 
     <button id="resetBtn" class="btn danger">Alle vinkjes wissen</button>
+  </dialog>
+
+  <dialog id="weken">
+    <div class="menu-head">
+      <h2>Alle weken</h2>
+      <button id="closeWeken" class="icon-btn" aria-label="Sluiten">✕</button>
+    </div>
+    <ol id="wekenLijst" class="weken-lijst"></ol>
   </dialog>
 
   <script src="app.js"></script>

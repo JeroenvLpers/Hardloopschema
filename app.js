@@ -43,6 +43,30 @@ const km = (n) => n.toLocaleString('nl-NL') + ' km';
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const klem = (n, min, max) => Math.min(max, Math.max(min, n));
 
+// Korte trilling (als de telefoon dat ondersteunt)
+function tril(patroon) {
+  try { if (navigator.vibrate) navigator.vibrate(patroon); } catch (e) { /* negeren */ }
+}
+
+// '37:12', '1:02:05' of '45' (minuten) -> seconden
+function naarSec(tijd) {
+  const d = String(tijd).trim().split(':').map(Number);
+  if (d.some(isNaN)) return 0;
+  if (d.length === 1) return d[0] * 60;
+  if (d.length === 2) return d[0] * 60 + d[1];
+  if (d.length === 3) return d[0] * 3600 + d[1] * 60 + d[2];
+  return 0;
+}
+
+// Gemiddeld tempo uit gelopen km en tijd, bijv. '6:02 /km' (leeg als het niet kan)
+function tempo(g) {
+  const k = parseFloat(String(g.km || '').replace(',', '.'));
+  const s = naarSec(g.tijd || '');
+  if (!(k > 0) || !(s > 0)) return '';
+  const p = Math.round(s / k);
+  return `${Math.floor(p / 60)}:${String(p % 60).padStart(2, '0')} /km`;
+}
+
 /* ---------- Opslag op de telefoon ---------- */
 
 function laad() {
@@ -98,7 +122,7 @@ function tekenKop() {
   $('daysLeft').innerHTML =
     rest > 1 ? `nog <strong>${rest}</strong> dagen` :
     rest === 1 ? 'nog <strong>1</strong> dag' :
-    rest === 0 ? '<strong>Vandaag!</strong> Succes 🏁' :
+    rest === 0 ? '<strong>Het is zover!</strong> Succes vandaag 🏁' :
     '<strong>Gefinisht</strong> 🏁';
   $('startLabel').textContent = 'start ' + kort(start, false);
   $('endLabel').textContent = kort(race, false);
@@ -113,7 +137,10 @@ function tekenWeek() {
 
   $('weekTitle').textContent = `Week ${week + 1} van ${n}`;
   $('weekMeta').textContent = `${kort(eerste, false)} – ${kort(eerste + 6, false)}${label ? ' · ' + label : ''}`;
-  $('weekDone').textContent = `${gedaan}/${items.length} voltooid`;
+  const compleet = gedaan === items.length;
+  $('weekDone').innerHTML = `${compleet ? `<span class="vink-ico">${VINK}</span>` : ''}${gedaan}/${items.length} voltooid`;
+  $('weekDone').classList.toggle('compleet', compleet);
+  $('weekDone').classList.remove('pop');
   $('prevWeek').disabled = week === 0;
   $('nextWeek').disabled = week === n - 1;
   $('thisWeek').hidden = week === huidigeWeek();
@@ -121,27 +148,33 @@ function tekenWeek() {
   $('cards').innerHTML = items.map((x) => kaart(x, eerste)).join('');
 }
 
+const kmRegel = (t, g) => km(t.km) + (tempo(g) ? ' · tempo ' + tempo(g) : '');
+const tempoRegel = (g) => (tempo(g) ? `Gemiddeld tempo: <strong>${tempo(g)}</strong>` : '');
+
 function kaart({ id, t, dag, standaard, datum }, eerste) {
   const klaar = !!staat.klaar[id];
   const isVandaag = datum === vandaag;
+  const gemist = !klaar && datum < vandaag;
+  const raceVandaag = isVandaag && t.soort === 'wedstrijd';
   const isOpen = open.has(id);
   const g = staat.gelopen[id] || {};
 
   const stappen = t.stappen.map((s) => `
     <li>
       <div class="step-main"><span class="step-title">${esc(s.titel)}</span><span class="step-detail">${esc(s.detail || '')}</span></div>
+      ${schema.rustigTempo && /rustig/i.test(s.detail || '') ? `<span class="step-noot">${esc(schema.rustigTempo)}</span>` : ''}
       ${s.rust ? `<span class="step-rust">${esc(s.rust)}</span>` : ''}
     </li>`).join('');
 
   const opties = DAGEN.map((_, i) => `<option value="${i + 1}"${i + 1 === dag ? ' selected' : ''}>${kort(eerste + i)}${i + 1 === standaard ? ' (standaard)' : ''}</option>`).join('');
 
   return `
-  <article class="card soort-${esc(t.soort)}${klaar ? ' done' : ''}${isVandaag ? ' today' : ''}" data-id="${id}">
+  <article class="card soort-${esc(t.soort)}${klaar ? ' done' : ''}${isVandaag ? ' today' : ''}${raceVandaag ? ' race-vandaag' : ''}" data-id="${id}">
     <div class="card-head">
       <button class="card-toggle" aria-expanded="${isOpen}">
-        <span class="date">${isVandaag ? '<span class="badge">Vandaag</span>' : ''}<span class="date-text">${kort(datum)}</span>${dag !== standaard ? '<span class="moved">verplaatst</span>' : ''}</span>
-        <span class="title">${esc(t.titel)}</span>
-        <span class="km">${km(t.km)}</span>
+        <span class="date">${isVandaag ? '<span class="badge">Vandaag</span>' : ''}<span class="date-text">${kort(datum)}</span>${gemist ? '<span class="gemist" role="img" aria-label="gemist"></span>' : ''}${dag !== standaard ? '<span class="moved">verplaatst</span>' : ''}</span>
+        <span class="title">${esc(raceVandaag ? schema.wedstrijd.naam : t.titel)}</span>
+        <span class="km">${kmRegel(t, g)}</span>
       </button>
       <button class="check" aria-pressed="${klaar}" aria-label="${klaar ? 'Afvinken ongedaan maken' : 'Afvinken'}">${VINK}</button>
     </div>
@@ -151,6 +184,7 @@ function kaart({ id, t, dag, standaard, datum }, eerste) {
         <label>Gelopen km<input data-veld="km" inputmode="decimal" placeholder="${t.km.toLocaleString('nl-NL')}" value="${esc(g.km || '')}"></label>
         <label>Tijd<input data-veld="tijd" placeholder="u:mm:ss" value="${esc(g.tijd || '')}"></label>
       </div>
+      <p class="tempo-regel">${tempoRegel(g)}</p>
       ${t.vasteDag ? '' : `<label class="move">Verplaats naar<select data-standaard="${standaard}">${opties}</select></label>`}
     </div>
   </article>`;
@@ -177,6 +211,13 @@ $('cards').addEventListener('click', (e) => {
     else staat.klaar[id] = true;
     bewaar();
     tekenWeek();
+    if (!staat.klaar[id]) return;
+
+    const isRace = trainingenVan(week).find((x) => x.id === id).t.soort === 'wedstrijd';
+    const weekKlaar = $('weekDone').classList.contains('compleet');
+    if (isRace) finish();
+    else if (weekKlaar) { tril([20, 80, 40]); vier(); }
+    else tril(25);
   } else if (e.target.closest('.card-toggle')) {
     if (open.has(id)) open.delete(id);
     else open.add(id);
@@ -184,15 +225,106 @@ $('cards').addEventListener('click', (e) => {
   }
 });
 
+// Kleine viering als alle trainingen van de week klaar zijn
+function vier() {
+  const el = $('weekDone');
+  el.classList.remove('pop');
+  void el.offsetWidth; // animatie opnieuw laten starten
+  el.classList.add('pop');
+
+  const kleuren = ['--done', '--rustig', '--interval', '--tempo', '--lang'];
+  const burst = document.createElement('span');
+  burst.className = 'burst';
+  burst.innerHTML = '<i class="ring"></i>' + Array.from({ length: 10 }, (_, i) =>
+    `<i class="deeltje" style="--hoek:${i * 36}deg;--kleur:var(${kleuren[i % 5]})"></i>`).join('');
+  el.querySelector('.vink-ico').append(burst);
+  setTimeout(() => burst.remove(), 800);
+}
+
+// Feestelijk finishscherm als je de wedstrijd afvinkt
+function finish() {
+  const w = schema.wedstrijd;
+  const raceId = trainingenVan(schema.weken.length - 1).find((x) => x.t.soort === 'wedstrijd').id;
+  const g = staat.gelopen[raceId] || {};
+  const totaal = schema.weken.reduce((n, wk) => n + wk.trainingen.length, 0);
+  const gedaan = schema.weken.reduce((n, wk, i) =>
+    n + wk.trainingen.filter((_, j) => staat.klaar[`w${i + 1}-${j + 1}`]).length, 0);
+  const kleuren = ['--done', '--rustig', '--interval', '--tempo', '--lang', '--text'];
+
+  const scherm = document.createElement('div');
+  scherm.className = 'finish-scherm';
+  scherm.innerHTML = `
+    <div class="confetti">${Array.from({ length: 40 }, (_, i) =>
+      `<i style="--x:${(Math.random() * 100).toFixed(1)}%;--d:${(Math.random() * 0.9).toFixed(2)}s;--r:${Math.floor(Math.random() * 360)}deg;--kleur:var(${kleuren[i % kleuren.length]})"></i>`).join('')}</div>
+    <div class="finish-kaart" role="dialog" aria-label="Gefinisht">
+      <div class="medaille">🏅</div>
+      <h2>Gefinisht!</h2>
+      <p>${esc(w.naam)} · ${esc(w.afstand)}</p>
+      ${g.tijd ? `<p class="finish-tijd">${esc(g.tijd)}${tempo(g) ? ' · ' + tempo(g) : ''}</p>` : ''}
+      <p class="sub">${gedaan} van ${totaal} trainingen voltooid</p>
+      <button class="btn">Sluiten</button>
+    </div>`;
+  scherm.onclick = () => scherm.remove();
+  document.body.append(scherm);
+  tril([40, 80, 40, 80, 120]);
+}
+
 // Gelopen km / tijd: direct bewaren tijdens het typen
 $('cards').addEventListener('input', (e) => {
   const veld = e.target.dataset.veld;
   if (!veld) return;
-  const id = e.target.closest('.card').dataset.id;
+  const card = e.target.closest('.card');
+  const id = card.dataset.id;
   const g = { ...staat.gelopen[id], [veld]: e.target.value.trim() };
   if (!g.km && !g.tijd) delete staat.gelopen[id];
   else staat.gelopen[id] = g;
   bewaar();
+
+  // Tempo direct bijwerken, zonder de kaart opnieuw te tekenen (dan blijft je cursor staan)
+  const t = trainingenVan(week).find((x) => x.id === id).t;
+  card.querySelector('.km').textContent = kmRegel(t, g);
+  card.querySelector('.tempo-regel').innerHTML = tempoRegel(g);
+});
+
+/* ---------- Overzicht van alle weken ---------- */
+
+const wekenDialog = $('weken');
+
+function tekenWeken() {
+  const nu = huidigeWeek();
+  $('wekenLijst').innerHTML = schema.weken.map((wk, i) => {
+    const eerste = start + i * 7;
+    const items = trainingenVan(i);
+    const gedaan = items.filter((x) => staat.klaar[x.id]).length;
+    const stippen = items.map((x) => {
+      const soort = staat.klaar[x.id] ? 'klaar' : x.datum < vandaag ? 'gemist' : 'open';
+      return `<i class="stip ${soort}"></i>`;
+    }).join('');
+    return `
+      <li><button class="week-rij${i === nu ? ' nu' : ''}${i === week ? ' gekozen' : ''}" data-week="${i}">
+        <span class="wr-tekst">
+          <span class="wr-titel">Week ${i + 1}${i === nu ? ' <span class="badge">Nu</span>' : ''}</span>
+          <span class="sub">${kort(eerste, false)} – ${kort(eerste + 6, false)}${wk.label ? ' · ' + esc(wk.label) : ''}</span>
+        </span>
+        <span class="wr-stippen" aria-label="${gedaan} van ${items.length} voltooid">${stippen}</span>
+      </button></li>`;
+  }).join('');
+}
+
+$('weekBtn').onclick = () => {
+  tekenWeken();
+  wekenDialog.showModal();
+  const gekozen = wekenDialog.querySelector('.gekozen');
+  if (gekozen) gekozen.scrollIntoView({ block: 'center' });
+};
+$('closeWeken').onclick = () => wekenDialog.close();
+wekenDialog.addEventListener('click', (e) => {
+  if (e.target === wekenDialog) return wekenDialog.close();
+  const rij = e.target.closest('.week-rij');
+  if (!rij) return;
+  week = Number(rij.dataset.week);
+  wekenDialog.close();
+  tekenWeek();
 });
 
 // Verplaatsen binnen de week

@@ -15,6 +15,7 @@
   --wedstrijd: #CCD0CF;
 
   --done: #6FA58A;
+  --gemist: #C98484;
   --radius: 16px;
   color-scheme: dark;
 }
@@ -82,15 +83,16 @@ button { cursor: pointer; }
   border-radius: 99px;
   background: linear-gradient(90deg, var(--muted), var(--text-2));
 }
+/* Hardloper-emoji; gespiegeld zodat hij naar de finish (rechts) loopt */
 .runner {
   position: absolute;
-  top: 50%;
-  width: 20px;
-  height: 20px;
-  margin: -10px 0 0 -10px;
-  border-radius: 50%;
-  background: var(--text);
-  box-shadow: 0 0 0 4px var(--bg), 0 0 0 5px var(--muted);
+  bottom: 2px;
+  width: 30px;
+  margin-left: -15px;
+  font-size: 26px;
+  line-height: 1;
+  text-align: center;
+  transform: scaleX(-1);
 }
 .finish {
   position: absolute;
@@ -115,8 +117,18 @@ button { cursor: pointer; }
   justify-content: space-between;
   gap: 8px;
 }
-.weeknav-mid { text-align: center; }
-.weeknav h2 { font-size: 20px; font-weight: 700; }
+/* Weektitel is een knop: tik = overzicht van alle weken */
+.weeknav-mid {
+  display: grid;
+  justify-items: center;
+  padding: 6px 12px;
+  border: 0;
+  border-radius: 12px;
+  background: none;
+}
+.weeknav-mid:active { background: var(--surface); }
+.week-title { font-size: 20px; font-weight: 700; }
+.week-title::after { content: " ▾"; font-size: 14px; color: var(--text-2); }
 
 .weekline {
   display: flex;
@@ -128,6 +140,57 @@ button { cursor: pointer; }
   color: var(--text-2);
   font-size: 15px;
 }
+/* Weekteller + viering bij 3/3 */
+#weekDone { display: inline-flex; align-items: center; gap: 8px; }
+#weekDone.compleet { color: var(--done); font-weight: 600; }
+.vink-ico {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--done);
+  color: var(--bg);
+}
+.vink-ico svg { width: 15px; height: 15px; }
+#weekDone.pop .vink-ico { animation: pop .5s ease-out; }
+@keyframes pop {
+  0% { transform: scale(0); }
+  45% { transform: scale(1.35); }
+  70% { transform: scale(.9); }
+  100% { transform: scale(1); }
+}
+.burst { position: absolute; left: 50%; top: 50%; pointer-events: none; }
+.burst .ring {
+  position: absolute;
+  left: -16px; top: -16px;
+  width: 32px; height: 32px;
+  border: 2px solid var(--done);
+  border-radius: 50%;
+  animation: ring .6s ease-out forwards;
+}
+.burst .deeltje {
+  position: absolute;
+  left: -3px; top: -3px;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--kleur);
+  animation: deeltje .7s ease-out forwards;
+}
+@keyframes ring {
+  from { transform: scale(.4); opacity: .9; }
+  to { transform: scale(1.8); opacity: 0; }
+}
+@keyframes deeltje {
+  from { transform: rotate(var(--hoek)) translateY(-10px) scale(1); opacity: 1; }
+  to { transform: rotate(var(--hoek)) translateY(-30px) scale(.2); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #weekDone.pop .vink-ico { animation: none; }
+  .burst { display: none; }
+}
+
 .link-btn {
   border: 0;
   padding: 8px 12px;
@@ -161,6 +224,13 @@ button { cursor: pointer; }
 .soort-wedstrijd { --soort: var(--wedstrijd); }
 
 .card.today { box-shadow: inset 0 0 0 2px var(--text-2); }
+
+/* Wedstrijddag: de wedstrijdkaart valt extra op */
+.card.race-vandaag { box-shadow: inset 0 0 0 2px var(--text), 0 0 28px rgb(204 208 207 / .14); }
+.card.race-vandaag .title { font-size: 21px; }
+
+/* Gemist: klein stipje achter de datum */
+.gemist { width: 8px; height: 8px; border-radius: 50%; background: var(--gemist); }
 
 .card-head { display: flex; align-items: center; }
 
@@ -243,6 +313,11 @@ button { cursor: pointer; }
 .step-title { font-weight: 600; }
 .step-detail { color: var(--text-2); text-align: right; }
 .step-rust { grid-column: 2; font-size: 14px; color: var(--text-2); font-style: italic; }
+.step-noot { grid-column: 2; font-size: 14px; color: var(--text-2); text-align: right; }
+
+.tempo-regel { margin: -2px 0 12px; font-size: 15px; color: var(--text-2); }
+.tempo-regel:empty { display: none; }
+.tempo-regel strong { color: var(--text); }
 
 .fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
 .fields label, .move { display: grid; gap: 4px; font-size: 13px; color: var(--text-2); }
@@ -267,8 +342,84 @@ dialog {
   border-radius: 20px;
   background: var(--surface);
   color: var(--text);
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
 }
 dialog::backdrop { background: rgb(6 20 27 / .75); }
+
+/* ===== Overzicht van alle weken ===== */
+.weken-lijst { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 6px; }
+.week-rij {
+  width: 100%;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: var(--bg);
+  text-align: left;
+}
+.week-rij.gekozen { border-color: var(--muted); }
+.week-rij.nu { border-color: var(--text-2); }
+.wr-tekst { display: grid; }
+.wr-titel { display: flex; align-items: center; gap: 8px; font-weight: 650; }
+.wr-tekst .sub { font-size: 13px; }
+.wr-stippen { display: flex; gap: 6px; flex: none; }
+.stip { width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--muted); }
+.stip.klaar { background: var(--done); border-color: var(--done); }
+.stip.gemist { background: var(--gemist); border-color: var(--gemist); }
+
+/* ===== Finishscherm (wedstrijd afgevinkt) ===== */
+.finish-scherm {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgb(6 20 27 / .85);
+  animation: fade .3s ease-out;
+}
+.finish-kaart {
+  position: relative;
+  width: min(100%, 360px);
+  padding: 28px 20px 20px;
+  border: 1px solid var(--surface-2);
+  border-radius: 20px;
+  background: var(--surface);
+  text-align: center;
+  animation: omhoog .5s cubic-bezier(.2, 1.4, .4, 1);
+}
+.medaille { font-size: 64px; line-height: 1; animation: pop .7s .15s both; }
+.finish-kaart h2 { margin: 14px 0 4px; font-size: 26px; }
+.finish-kaart p { margin-bottom: 6px; }
+.finish-tijd { font-size: 20px; font-weight: 700; }
+.finish-kaart .btn { margin-top: 16px; }
+
+.confetti { position: fixed; inset: 0; overflow: hidden; pointer-events: none; }
+.confetti i {
+  position: absolute;
+  top: -16px;
+  left: var(--x);
+  width: 8px;
+  height: 12px;
+  border-radius: 2px;
+  background: var(--kleur);
+  animation: val 2.8s var(--d) ease-in both;
+}
+@keyframes val {
+  from { transform: translateY(0) rotate(var(--r)); }
+  to { transform: translateY(110vh) rotate(calc(var(--r) + 600deg)); }
+}
+@keyframes fade { from { opacity: 0; } }
+@keyframes omhoog { from { transform: translateY(30px) scale(.9); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .confetti { display: none; }
+  .finish-scherm, .finish-kaart, .medaille { animation: none; }
+}
 .menu-head { display: flex; justify-content: space-between; align-items: center; margin-right: -12px; }
 .menu-head h2 { font-size: 20px; }
 .menu-head .icon-btn { font-size: 22px; }
@@ -294,7 +445,6 @@ dialog h3 { font-size: 16px; margin: 8px 0 2px; }
 }
 .btn:disabled { opacity: .4; }
 .btn.danger { background: transparent; border: 1px solid #7a4a4a; color: #d9a3a3; }
-
 hr { border: 0; border-top: 1px solid var(--surface-2); margin: 22px 0; }
 
 .error { padding: 20px; border-radius: var(--radius); background: var(--surface); color: var(--text-2); }
