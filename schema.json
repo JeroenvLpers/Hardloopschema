@@ -8,6 +8,18 @@
   "standaardDagen": [2, 4, 7],
   "rustigTempo": "6:30–7:00 /km",
 
+  "standaardPlek": "Leusden",
+  "routes": {
+    "Leusden": [
+      { "naam": "Heiligenbergerbeek – Lammerenpark", "km": 5.55, "url": "https://www.komoot.com/nl-nl/smarttour/8881463" },
+      { "naam": "De Schammer – Valleikanaal", "km": 10.0, "url": "https://www.komoot.com/nl-nl/smarttour/28070372" },
+      { "naam": "De Schammer – uitzicht over het landschap", "km": 11.5, "url": "https://www.komoot.com/nl-nl/smarttour/22514455" },
+      { "naam": "Heuvels, vennen en architectuur in Den Treek", "km": 12.6, "url": "https://www.komoot.com/nl-nl/smarttour/e1006119461" },
+      { "naam": "Den Treek-Henschoten – Treekerpunt", "km": 12.9, "url": "https://www.komoot.com/nl-nl/smarttour/39755849" },
+      { "naam": "Valleikanaal-pad", "km": 17.0, "url": "https://www.komoot.com/nl-nl/smarttour/4470062" }
+    ]
+  },
+
   "weken": [
     {
       "label": "",

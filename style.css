@@ -319,6 +319,27 @@ button { cursor: pointer; }
 .tempo-regel:empty { display: none; }
 .tempo-regel strong { color: var(--text); }
 
+.route {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  border: 1px solid var(--surface-2);
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--text);
+  text-decoration: none;
+}
+.route:active { background: var(--surface-2); }
+.route-ico { font-size: 20px; }
+.route-tekst { display: grid; gap: 2px; flex: 1; min-width: 0; }
+.route-naam { font-weight: 600; overflow-wrap: anywhere; }
+.route-info { font-size: 13px; color: var(--text-2); }
+.route-pijl { color: var(--text-2); }
+.plek-veld { margin: 14px 0; }
+
 .fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
 .fields label, .move { display: grid; gap: 4px; font-size: 13px; color: var(--text-2); }
 

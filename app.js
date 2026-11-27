@@ -148,6 +148,45 @@ function tekenWeek() {
   $('cards').innerHTML = items.map((x) => kaart(x, eerste)).join('');
 }
 
+/* ---------- Komoot-route bij een training ---------- */
+
+const plek = () => staat.plek || schema.standaardPlek || '';
+
+// Routes voor de gekozen plek (hoofdletters maken niet uit)
+function routesVoor(naam) {
+  const sleutel = Object.keys(schema.routes || {}).find((k) => k.toLowerCase() === naam.trim().toLowerCase());
+  return sleutel ? schema.routes[sleutel] : [];
+}
+
+function routeBlok(t) {
+  if (t.soort === 'wedstrijd') return '';
+  const p = plek();
+  if (!p) return '';
+  const routes = routesVoor(p);
+
+  // Geen routes bekend voor deze plek: zoeklink naar Komoot-routes in de buurt
+  if (!routes.length) {
+    const zoek = 'https://duckduckgo.com/?q=' + encodeURIComponent(`komoot hardlopen rond ${p} ${Math.round(t.km)} km`);
+    return `<a class="route" href="${zoek}" target="_blank" rel="noopener">
+      <span class="route-ico" aria-hidden="true">🗺️</span>
+      <span class="route-tekst"><span class="route-naam">Zoek een Komoot-route rond ${esc(p)}</span>
+      <span class="route-info">ongeveer ${km(t.km)}</span></span>
+      <span class="route-pijl" aria-hidden="true">↗</span></a>`;
+  }
+
+  // De route waarvan de afstand het dichtst bij de training ligt
+  const r = routes.reduce((a, b) => (Math.abs(b.km - t.km) < Math.abs(a.km - t.km) ? b : a));
+  const verschil = Math.round((r.km - t.km) * 10) / 10;
+  const uitleg = Math.abs(verschil) < 0.5 ? 'past precies'
+    : verschil > 0 ? `${km(verschil)} langer dan je training`
+    : `${km(-verschil)} korter dan je training`;
+  return `<a class="route" href="${esc(r.url)}" target="_blank" rel="noopener">
+    <span class="route-ico" aria-hidden="true">🗺️</span>
+    <span class="route-tekst"><span class="route-naam">${esc(r.naam)}</span>
+    <span class="route-info">Komoot · ${km(r.km)} · ${uitleg}</span></span>
+    <span class="route-pijl" aria-hidden="true">↗</span></a>`;
+}
+
 const kmRegel = (t, g) => km(t.km) + (tempo(g) ? ' · tempo ' + tempo(g) : '');
 const tempoRegel = (g) => (tempo(g) ? `Gemiddeld tempo: <strong>${tempo(g)}</strong>` : '');
 
@@ -180,6 +219,7 @@ function kaart({ id, t, dag, standaard, datum }, eerste) {
     </div>
     <div class="card-body"${isOpen ? '' : ' hidden'}>
       <ol class="steps">${stappen}</ol>
+      ${routeBlok(t)}
       <div class="fields">
         <label>Gelopen km<input data-veld="km" inputmode="decimal" placeholder="${t.km.toLocaleString('nl-NL')}" value="${esc(g.km || '')}"></label>
         <label>Tijd<input data-veld="tijd" placeholder="u:mm:ss" value="${esc(g.tijd || '')}"></label>
@@ -353,7 +393,17 @@ function tekenDagkeuze() {
 $('menuBtn').onclick = () => {
   keuze = new Set(gekozenDagen());
   tekenDagkeuze();
+  $('plek').value = plek();
+  $('plekken').innerHTML = Object.keys(schema.routes || {}).map((k) => `<option value="${esc(k)}">`).join('');
   menu.showModal();
+};
+
+$('savePlek').onclick = () => {
+  const p = $('plek').value.trim();
+  staat.plek = !p || p === schema.standaardPlek ? null : p;
+  bewaar();
+  menu.close();
+  teken();
 };
 $('closeMenu').onclick = () => menu.close();
 menu.addEventListener('click', (e) => { if (e.target === menu) menu.close(); });
